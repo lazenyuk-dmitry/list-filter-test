@@ -11,6 +11,8 @@
             class="form-control"
             placeholder="Фильтр + поиск"
             ref="input"
+            :value="filterString"
+            readonly
             @click.stop="onInputFocus"
           />
 
@@ -103,7 +105,7 @@
                 </button>
               </div>
               <div class="col-auto">
-                <button type="button" class="btn btn-light">Сбросить</button>
+                <button type="button" class="btn btn-light" @click="resetFilters">Сбросить</button>
               </div>
             </div>
           </form>
@@ -117,6 +119,7 @@
 import { Dropdown } from "bootstrap";
 import { ROLE, STATUS } from "@/constants/filter";
 import { mapActions } from "vuex";
+import { getKeyByValue } from "@/helpers";
 
 export default {
   name: "AppFilter",
@@ -143,6 +146,33 @@ export default {
       reference: this.$refs.input,
     });
   },
+  computed: {
+    filterString() {
+      let string = "";
+
+      Object.entries(this.formData).forEach(([key, value]) => {
+        let filterName = null;
+
+        if (value !== "" && typeof value === 'string') {
+          filterName = value;
+        }
+
+        if (value !== "" && key === 'role') {
+          filterName = getKeyByValue(ROLE, value);
+        }
+
+        if (value !== "" && key === 'status') {
+          filterName = getKeyByValue(STATUS, value);
+        }
+
+        if (filterName) {
+          string = !string ? `${filterName}` : `${string} + ${filterName}`;
+        }
+      });
+
+      return string;
+    }
+  },
   methods: {
     ...mapActions("AppFilter", ["setFilters"]),
 
@@ -154,6 +184,13 @@ export default {
     },
     applyFilters() {
       this.setFilters({ data: this.formData });
+    },
+    resetFilters() {
+      Object.entries(this.formData).forEach(([key, value]) => {
+        this.formData[key] = "";
+      });
+
+      this.applyFilters();
     },
   },
 };
