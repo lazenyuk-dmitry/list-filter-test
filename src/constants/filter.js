@@ -7,4 +7,5 @@ export const ROLE = {
 export const STATUS = {
   Active: 1,
   Closed: 2,
+  Wait: 3,
 };
