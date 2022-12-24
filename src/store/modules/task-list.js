@@ -153,7 +153,7 @@ export default {
 
         for (const [key, value] of Object.entries(item)) {
           if (typeof value === "string") {
-            if (filters[key] !== "" && value.indexOf(filters[key]) !== -1) {
+            if (filters[key] !== "" && value.toLocaleLowerCase().indexOf(filters[key].toLocaleLowerCase()) !== -1) {
               matchCount++;
             }
           }
