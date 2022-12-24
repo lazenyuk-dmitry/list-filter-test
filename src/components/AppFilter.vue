@@ -26,52 +26,81 @@
             <div class="mb-4">
               <label for="filterRole" class="form-label">Роль</label>
               <select
+                v-model.lazy="formData.role"
                 class="form-select"
                 id="filterRole"
                 aria-label="Default select example"
               >
-                <option selected>Не указан</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option selected value="">Не указан</option>
+                <option v-for="(val, key) in ROLE" :key="val" :value="val">
+                  {{ key }}
+                </option>
               </select>
             </div>
             <div class="mb-4">
               <label for="filterResponsible" class="form-label">
                 Ответственный
               </label>
-              <input type="text" class="form-control" id="filterResponsible" />
+              <input
+                v-model.lazy="formData.responsible"
+                type="text"
+                class="form-control"
+                id="filterResponsible"
+              />
             </div>
             <div class="mb-4">
               <label for="filterProvider" class="form-label">Поставщик</label>
-              <input type="text" class="form-control" id="filterProvider" />
+              <input
+                v-model.lazy="formData.provider"
+                type="text"
+                class="form-control"
+                id="filterProvider"
+              />
             </div>
             <div class="mb-4">
               <label for="filterTitle" class="form-label">Название</label>
-              <input type="text" class="form-control" id="filterTitle" />
+              <input
+                v-model.lazy="formData.title"
+                type="text"
+                class="form-control"
+                id="filterTitle"
+              />
             </div>
             <div class="mb-4">
               <label for="filterStatus" class="form-label">Статус</label>
               <select
+                v-model.lazy="formData.status"
                 class="form-select"
                 id="filterStatus"
                 aria-label="Default select example"
               >
-                <option selected>Не указан</option>
-                <option value="1">Active</option>
-                <option value="2">Closed</option>
+                <option selected value="">Не указан</option>
+                <option v-for="(val, key) in STATUS" :key="val" :value="val">
+                  {{ key }}
+                </option>
               </select>
             </div>
             <div class="mb-4">
               <label for="filterDeadline" class="form-label">
                 Крайний срок
               </label>
-              <input type="date" class="form-control" id="filterDeadline" />
+              <input
+                v-model.lazy="formData.deadline"
+                type="date"
+                class="form-control"
+                id="filterDeadline"
+              />
             </div>
 
             <div class="row justify-content-center">
               <div class="col-auto">
-                <button type="button" class="btn btn-primary">Найти</button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  @click="applyFilters"
+                >
+                  Найти
+                </button>
               </div>
               <div class="col-auto">
                 <button type="button" class="btn btn-light">Сбросить</button>
@@ -86,6 +115,8 @@
 
 <script>
 import { Dropdown } from "bootstrap";
+import { ROLE, STATUS } from "@/constants/filter";
+import { mapActions } from "vuex";
 
 export default {
   name: "AppFilter",
@@ -93,6 +124,16 @@ export default {
     return {
       dropdownTrigger: null,
       dropdown: null,
+      ROLE,
+      STATUS,
+      formData: {
+        role: "",
+        responsible: "",
+        provider: "",
+        title: "",
+        status: "",
+        deadline: "",
+      },
     };
   },
   mounted() {
@@ -103,11 +144,16 @@ export default {
     });
   },
   methods: {
+    ...mapActions("AppFilter", ["setFilters"]),
+
     onInputFocus() {
       this.dropdown.show();
     },
     returnFocus() {
       this.$refs.input.focus();
+    },
+    applyFilters() {
+      this.setFilters({ data: this.formData });
     },
   },
 };
