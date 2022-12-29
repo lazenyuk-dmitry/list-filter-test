@@ -1,6 +1,7 @@
 # list-filter
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a test task. To Do List Filter on Vue.
+**[LIVE DEMO](https://lazenyuk-dmitry.github.io/list-filter-test/)**
 
 ## Recommended IDE Setup
 
@@ -26,6 +27,12 @@ npm run dev
 
 ```sh
 npm run build
+```
+
+### Compile, build and deploy
+
+```sh
+npm run deploy
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
